@@ -1,0 +1,44 @@
+import React, { useState } from "react";
+const FileDownloader = () => {
+const [selectedFile, setSelectedFile] = useState("");
+const files = [
+{ name: "file1.txt", content: "This is the content of file1." },
+{ name: "file2.txt", content: "Content of file2 goes here." },
+{ name: "file3.txt", content: "Another file content for file3." },
+];
+const handleDownload = () => {
+if (!selectedFile) {
+alert("Please select a file to download.");
+return;
+
+}
+const fileToDownload = files.find((file) => file.name === selectedFile);
+const blob = new Blob([fileToDownload.content], { type: "text/plain" });
+const url = URL.createObjectURL(blob);
+const link = document.createElement("a");
+link.href = url;
+link.download = fileToDownload.name;
+link.click();
+URL.revokeObjectURL(url);
+};
+return (
+<div>
+<h3>Download a File</h3>
+<select
+value={selectedFile}
+onChange={(e) => setSelectedFile(e.target.value)}
+>
+<option value="">-- Select a file --</option>
+{files.map((file) => (
+<option key={file.name} value={file.name}>
+{file.name}
+</option>
+))}
+</select>
+<button onClick={handleDownload} style={{ marginLeft: "10px" }}>
+Download
+</button>
+</div>
+);
+};
+export default FileDownloader;
